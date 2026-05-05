@@ -1,1 +1,373 @@
-Thank you for using TrebEdit.
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+  <title>دعوة حفل التخرج</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --background: 221 50% 9%;
+      --foreground: 0 0% 100%;
+      --card: 221 45% 12%;
+      --primary: 46 65% 52%;
+      --muted-foreground: 46 50% 70%;
+      --radius: 0.5rem;
+      --font-sans: 'Aref Ruqaa', serif;
+      --gold: #d4af37;
+      --bg-dark: hsl(221, 50%, 9%);
+      --card-dark: hsl(221, 45%, 12%);
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg-dark);
+      color: var(--foreground);
+      line-height: 1.6;
+      overflow-x: hidden;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    /* ===== الجسيمات ===== */
+    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute; border-radius: 50%; pointer-events: none;
+      animation: float-up-to-middle var(--duration) var(--delay) infinite ease-in-out;
+      will-change: transform, opacity;
+    }
+    .particle.from-bottom { bottom: -5px; }
+    .particle.from-top { top: -5px; animation-name: float-down-to-middle; }
+
+    @keyframes float-up-to-middle {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10% { opacity: var(--start-opacity); }      50% { transform: translateY(-50vh) translateX(var(--drift)) scale(0.7); opacity: var(--start-opacity); }
+      100% { transform: translateY(-100vh) translateX(var(--drift)) scale(0.3); opacity: 0; }
+    }
+    @keyframes float-down-to-middle {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+      10% { opacity: var(--start-opacity); }
+      50% { transform: translateY(50vh) translateX(var(--drift)) scale(0.7); opacity: var(--start-opacity); }
+      100% { transform: translateY(100vh) translateX(var(--drift)) scale(0.3); opacity: 0; }
+    }
+
+    /* ===== الحاوية ===== */
+    .container {
+      max-width: 1200px; margin: 0 auto; padding: 4rem 1rem;
+      position: relative; z-index: 10;
+      display: flex; flex-direction: column; align-items: center; gap: 4rem;
+    }
+
+    /* ===== الهيدر ===== */
+    .header { text-align: center; max-width: 800px; }
+    .basmala { color: var(--gold); font-size: 1.25rem; letter-spacing: 2px; margin-bottom: 0.5rem; }
+    .invitation-badge { color: hsl(var(--primary) / 0.8); font-size: 1.1rem; margin-bottom: 1rem; }
+    .main-title {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 700;
+      background: linear-gradient(to bottom, var(--gold), #f3d371, var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; line-height: 1.2; padding: 0.5rem 0;
+      animation: shimmer 3s infinite linear;
+    }
+    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .intro-text { font-size: clamp(1rem, 2.5vw, 1.25rem); color: hsl(var(--foreground) / 0.9); margin: 1.5rem auto 0; line-height: 1.8; }
+
+    /* ===== العد التنازلي ===== */
+    .date-section { display: flex; flex-direction: column; align-items: center; gap: 1.5rem; width: 100%; }
+    .event-date { font-size: clamp(1.25rem, 3vw, 1.75rem); color: var(--gold); font-weight: 700; }
+    .countdown { display: flex; gap: 1rem; justify-content: center; direction: ltr; flex-wrap: wrap; }
+    .countdown-item { display: flex; flex-direction: column; align-items: center; min-width: 70px; }
+    .countdown-box {
+      width: 64px; height: 64px; background: var(--card-dark);
+      border: 1px solid hsl(var(--primary) / 0.3); border-radius: var(--radius);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px hsl(var(--primary) / 0.1); transition: transform 0.2s;
+    }
+    .countdown-box:hover { transform: translateY(-3px); }
+    .countdown-value { font-size: 1.5rem; font-weight: 700; color: var(--gold); }
+    .countdown-label { font-size: 0.875rem; color: hsl(var(--muted-foreground)); margin-top: 0.5rem; }
+    @media (min-width: 640px) { .countdown-box { width: 80px; height: 80px; } .countdown-value { font-size: 1.875rem; } }
+
+    /* ===== قسم الخريجين ===== */
+    .graduates-section { width: 100%; text-align: center; }
+    .section-title { font-size: clamp(1.25rem, 3vw, 1.75rem); color: var(--gold); font-weight: 700; margin-bottom: 2rem; }    .graduates-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; width: 100%; }
+    @media (min-width: 640px) { .graduates-grid { grid-template-columns: repeat(3, 1fr); } }
+
+    .graduate-card {
+      background: hsl(var(--card) / 0.5); border: 1px solid hsl(var(--primary) / 0.2);
+      border-radius: calc(var(--radius) + 0.25rem); padding: 1.5rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0.75rem;
+      backdrop-filter: blur(8px); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer; will-change: transform;
+    }
+    .graduate-card:hover, .graduate-card:active {
+      transform: translateY(-8px) scale(1.03) rotateX(2deg);
+      border-color: var(--gold); box-shadow: 0 20px 40px hsl(var(--primary) / 0.25), 0 0 30px hsl(var(--gold) / 0.15);
+    }
+    .graduate-card:active { transform: translateY(-4px) scale(1.02); transition-duration: 0.1s; }
+
+    .graduate-uni { font-size: 0.875rem; color: hsl(var(--muted-foreground)); }
+    .graduate-icon { font-size: 2.5rem; }
+    .graduate-name {
+      font-size: 1.5rem; font-weight: 700; position: relative; display: inline-block; overflow: hidden;
+      background: linear-gradient(110deg, var(--gold) 0%, #f9e8a8 25%, var(--gold) 45%, var(--gold) 55%, #f9e8a8 75%, var(--gold) 100%);
+      background-size: 200% 100%; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text; animation: goldShine 4s ease-in-out infinite;
+    }
+    @keyframes goldShine { 0% { background-position: 200% 0; } 15% { background-position: -200% 0; } 100% { background-position: -200% 0; } }
+    .graduate-name::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      animation: lightSweep 5s ease-in-out infinite; pointer-events: none;
+    }
+    @keyframes lightSweep { 0%, 85% { left: -100%; } 90%, 100% { left: 150%; } }
+
+    .graduate-major { font-size: 1.1rem; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+
+    /* ===== قسم المواقع ===== */
+    .locations-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; width: 100%; max-width: 900px; }
+    @media (min-width: 640px) { .locations-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .location-card {
+      background: hsl(var(--card) / 0.3); border: 1px solid hsl(var(--primary) / 0.3);
+      border-radius: calc(var(--radius) + 0.25rem); padding: 2rem 1.5rem;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .location-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .location-title { font-size: 1.5rem; font-weight: 700; color: var(--gold); margin-bottom: 0.5rem; }
+    .location-time { color: hsl(var(--foreground) / 0.8); margin-bottom: 1rem; line-height: 1.6; }
+    .qr-container {
+      background: white; border-radius: 0.75rem; padding: 0.5rem;
+      display: inline-block; margin: 1rem 0; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    .qr-container:hover { transform: scale(1.05); }
+    .qr-container img { width: 128px; height: 128px; display: block; }
+
+    .btn-group { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; margin-top: 1rem; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      padding: 0.75rem 1.5rem; border-radius: var(--radius); font-weight: 600; font-size: 1rem;
+      text-decoration: none; cursor: pointer; transition: all 0.2s; border: none; width: 100%; height: 48px;
+    }
+    .btn-primary { background: var(--gold); color: var(--primary-foreground); box-shadow: 0 4px 14px hsl(var(--primary) / 0.4); }
+    .btn-primary:hover { filter: brightness(1.1); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--gold); border: 2px solid hsl(var(--primary) / 0.5); }
+    .btn-outline:hover { background: hsl(var(--primary) / 0.1); border-color: var(--gold); transform: translateY(-2px); }
+    .btn svg { width: 20px; height: 20px; }
+
+    /* ===== الفوتر ===== */
+    .footer { text-align: center; padding: 2rem; font-size: 1.25rem; color: var(--gold); font-weight: 700; }
+
+    /* ===== 🔹 نظام الظهور الانسيابي المُصحح ===== */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .scroll-reveal.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+
+    /* تأخير متدرج للبطاقات */
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.25s; }
+    .stagger-3 { transition-delay: 0.4s; }
+
+    /* ===== Toast ===== */
+    #toast {
+      position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
+      background: var(--card-dark); border: 1px solid var(--gold); color: var(--foreground);
+      padding: 0.75rem 1.5rem; border-radius: var(--radius); box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+      z-index: 1000; transition: transform 0.3s ease; font-size: 0.95rem;
+    }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    @media (max-width: 480px) {      .container { padding: 1rem; gap: 2.5rem; }
+      .graduate-card { padding: 1.25rem; }
+      .location-card { padding: 1.5rem 1rem; }
+      .graduate-name { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="particles"></div>
+
+  <main class="container">
+    <header class="header scroll-reveal">
+      <div class="basmala">بسم الله الرحمن الرحيم</div>
+      <div class="invitation-badge">✧ دعوة كريمة ✧</div>
+      <h1 class="main-title">حفل تخرّج أبناء أبو نشأت</h1>
+      <p class="intro-text">
+        يتشرّف سلامة فليح الخوالدة (أبو نشأت) بدعوتكم لمشاركته فرحة تخرّج أبنائه الأعزاء،
+        سائلاً المولى عز وجل أن يوفقهم ويبارك في مسيرتهم.
+      </p>
+    </header>
+
+    <section class="date-section scroll-reveal">
+      <div class="event-date">الخميس، 26 يونيو 2026</div>
+      <div class="countdown" id="countdown">
+        <div class="countdown-item"><div class="countdown-box"><span class="countdown-value" id="days">00</span></div><span class="countdown-label">يوم</span></div>
+        <div class="countdown-item"><div class="countdown-box"><span class="countdown-value" id="hours">00</span></div><span class="countdown-label">ساعة</span></div>
+        <div class="countdown-item"><div class="countdown-box"><span class="countdown-value" id="minutes">00</span></div><span class="countdown-label">دقيقة</span></div>
+        <div class="countdown-item"><div class="countdown-box"><span class="countdown-value" id="seconds">00</span></div><span class="countdown-label">ثانية</span></div>
+      </div>
+    </section>
+
+    <section class="graduates-section scroll-reveal">
+      <h2 class="section-title">✧ ثلاث فرحات اجتمعت في بيتٍ واحد ✧</h2>
+      <div class="graduates-grid">
+        <article class="graduate-card scroll-reveal stagger-1">
+          <span class="graduate-uni">جامعة فيلادلفيا</span>
+          <span class="graduate-icon">🎓</span>
+          <h3 class="graduate-name">نشأت</h3>
+          <p class="graduate-major">🧠 الإرشاد النفسي</p>
+        </article>
+        <article class="graduate-card scroll-reveal stagger-2">
+          <span class="graduate-uni">جامعة الطفيلة التقنية</span>
+          <span class="graduate-icon">🎓</span>
+          <h3 class="graduate-name">صهيب</h3>
+          <p class="graduate-major">⚙️ هندسة الميكانيك مركبات</p>
+        </article>
+        <article class="graduate-card scroll-reveal stagger-3">
+          <span class="graduate-uni">جامعة اليرموك</span>
+          <span class="graduate-icon">🎓</span>
+          <h3 class="graduate-name">قصي</h3>          <p class="graduate-major">💉 التمريض</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="locations-grid">
+      <article class="location-card scroll-reveal stagger-1">
+        <h3 class="location-title">🎉 الزفة</h3>
+        <p class="location-time">الوقت: الساعة 7:15 مساءً</p>
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://maps.app.goo.gl/QmS3y5513bN2r8dSA" alt="QR الزفة">
+        </div>
+        <div class="btn-group">
+          <a href="https://maps.app.goo.gl/QmS3y5513bN2r8dSA" target="_blank" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            فتح موقع الزفة على الخريطة
+          </a>
+          <button class="btn btn-outline" onclick="shareLocation('https://maps.app.goo.gl/QmS3y5513bN2r8dSA')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>
+            مشاركة الموقع
+          </button>
+        </div>
+      </article>
+
+      <article class="location-card scroll-reveal stagger-2">
+        <h3 class="location-title">🎓 حفلة التخرج</h3>
+        <p class="location-time">الوقت: بعد الزفة<br>أمام منزل والدهم</p>
+        <div class="qr-container">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://goo.gl/maps/67gLcZc53iCVG7rn8" alt="QR الحفلة">
+        </div>
+        <div class="btn-group">
+          <a href="https://goo.gl/maps/67gLcZc53iCVG7rn8?g_st=afm" target="_blank" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            فتح موقع الحفلة على الخريطة
+          </a>
+          <button class="btn btn-outline" onclick="shareLocation('https://goo.gl/maps/67gLcZc53iCVG7rn8?g_st=afm')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.59 13.51 6.83 3.98"/><path d="m15.41 6.51-6.82 3.98"/></svg>
+            مشاركة الموقع
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer scroll-reveal">حضوركم يشرفنا ✨</footer>
+  </main>
+
+  <div id="toast">تم نسخ الرابط!</div>
+
+  <script>
+    // ===== الجسيمات =====    function createParticles() {
+      const container = document.getElementById('particles');
+      const GOLD = '#d4af37', SILVER = '#c0c0c0';
+      for (let i = 0; i < 70; i++) {
+        const p = document.createElement('span');
+        const isGold = i % 3 !== 2;
+        const size = Math.random() * 1.3 + 0.5;
+        const left = Math.random() * 100;
+        const duration = Math.random() * 10 + 10;
+        const delay = Math.random() * 15;
+        const drift = (Math.random() - 0.5) * 60;
+        const startOpacity = Math.random() * 0.4 + 0.4;
+        const fromTop = i % 2 === 0;
+        p.className = `particle ${fromTop ? 'from-top' : 'from-bottom'}`;
+        p.style.cssText = `
+          left: ${left}%; width: ${size}px; height: ${size}px;
+          background: ${isGold ? GOLD : SILVER}; opacity: 0;
+          box-shadow: ${isGold ? `0 0 ${size + 1}px 0.5px rgba(212,175,55,0.7)` : `0 0 ${size + 1}px 0.5px rgba(192,192,192,0.6)`};
+          --duration: ${duration}s; --delay: ${delay}s; --drift: ${drift}px; --start-opacity: ${startOpacity};
+        `;
+        container.appendChild(p);
+      }
+    }
+
+    // ===== العد التنازلي =====
+    function startCountdown() {
+      const targetDate = new Date('2026-06-26T19:15:00').getTime();
+      const el = { d: document.getElementById('days'), h: document.getElementById('hours'), m: document.getElementById('minutes'), s: document.getElementById('seconds') };
+      const box = document.getElementById('countdown');
+      const update = () => {
+        const diff = targetDate - new Date().getTime();
+        if (diff < 0) { box.innerHTML = '<div class="text-3xl font-bold text-[var(--gold)] my-4">🎉 الحفل الآن! 🎉</div>'; return; }
+        el.d.textContent = String(Math.floor(diff / 864e5)).padStart(2, '0');
+        el.h.textContent = String(Math.floor((diff % 864e5) / 36e5)).padStart(2, '0');
+        el.m.textContent = String(Math.floor((diff % 36e5) / 6e4)).padStart(2, '0');
+        el.s.textContent = String(Math.floor((diff % 6e4) / 1e3)).padStart(2, '0');
+      };
+      update(); setInterval(update, 1000);
+    }
+
+    // ===== 🔹 Scroll Reveal مُصحح ومضمون =====
+    function initScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast'); t.textContent = msg;
+      t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    async function shareLocation(url) {
+      if (navigator.share) { try { await navigator.share({ url, title: 'موقع حفل التخرج' }); return; } catch(e) {} }
+      await navigator.clipboard.writeText(url); showToast('✅ تم نسخ الرابط!');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      createParticles();
+      startCountdown();
+      initScrollReveal();
+
+      // دعم اللمس للجوال
+      document.querySelectorAll('.graduate-card').forEach(c => {
+        c.addEventListener('touchstart', () => c.style.transition = 'transform 0.1s');
+        c.addEventListener('touchend', () => c.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)');
+      });
+    });
+    window.shareLocation = shareLocation;
+  </script>
+</body>
+</html>
