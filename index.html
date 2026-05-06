@@ -18,6 +18,7 @@
       --radius: 0.5rem;
       --font-sans: 'Aref Ruqaa', serif;
       --gold: #d4af37;
+      --silver: #c0c0c0;
       --bg-dark: hsl(221, 50%, 9%);
       --card-dark: hsl(221, 45%, 12%);
     }
@@ -31,7 +32,69 @@
       min-height: 100vh;
       position: relative;
     }
-    #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+
+    /* صفحة البداية الفخمة (Splash Screen) */
+    #welcome-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg-dark);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      overflow: hidden;
+    }
+    .envelope-btn {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: hsl(var(--card));
+      border: 2px solid var(--gold);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 0 25px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(212, 175, 55, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: pulse 2s infinite ease-in-out;
+      z-index: 10001;
+    }
+    .envelope-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 35px rgba(212, 175, 55, 0.5);
+    }
+    .envelope-btn span {
+      color: var(--gold);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 5px;
+    }
+    .welcome-text {
+      margin-top: 25px;
+      color: var(--gold);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      font-weight: 700;
+      text-align: center;
+      padding: 0 15px;
+      z-index: 10001;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    /* كود جزيئات النجوم المتساقطة المشترك (تم إصلاح الـ z-index ليصبح خلفية تماماً) */
+    #particles { 
+      position: fixed; 
+      inset: 0; 
+      z-index: 0; 
+      pointer-events: none; 
+      overflow: hidden; 
+    }
     .particle {
       position: absolute;
       border-radius: 50%;
@@ -47,11 +110,14 @@
       50% { transform: translateY(-50vh) translateX(var(--drift)) scale(0.7); opacity: var(--start-opacity); }
       100% { transform: translateY(-100vh) translateX(var(--drift)) scale(0.3); opacity: 0; }
     }
-    @keyframes float-down-to-middle {      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
+    @keyframes float-down-to-middle {
+      0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
       10% { opacity: var(--start-opacity); }
       50% { transform: translateY(50vh) translateX(var(--drift)) scale(0.7); opacity: var(--start-opacity); }
       100% { transform: translateY(100vh) translateX(var(--drift)) scale(0.3); opacity: 0; }
     }
+
+    /* باقي تنسيقات الكود الأساسي */
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -96,7 +162,8 @@
       height: 64px;
       background: var(--card-dark);
       border: 1px solid hsl(var(--primary) / 0.3);
-      border-radius: var(--radius);      display: flex;
+      border-radius: var(--radius);
+      display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 20px hsl(var(--primary) / 0.1);
@@ -132,7 +199,6 @@
       border-color: var(--gold);
       box-shadow: 0 20px 40px hsl(var(--primary) / 0.25), 0 0 30px hsl(var(--gold) / 0.15);
     }
-    .graduate-card:active { transform: translateY(-4px) scale(1.02); transition-duration: 0.1s; }
     .graduate-uni { font-size: 0.875rem; color: hsl(var(--muted-foreground)); }
     .graduate-icon { font-size: 2.5rem; }
     .graduate-name {
@@ -145,27 +211,13 @@
       background-size: 200% 100%;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;      animation: goldShine 4s ease-in-out infinite;
+      background-clip: text;
+      animation: goldShine 4s ease-in-out infinite;
     }
     @keyframes goldShine {
       0% { background-position: 200% 0; }
       15% { background-position: -200% 0; }
       100% { background-position: -200% 0; }
-    }
-    .graduate-name::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-      animation: lightSweep 5s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes lightSweep {
-      0%, 85% { left: -100%; }
-      90%, 100% { left: 150%; }
     }
     .graduate-major { font-size: 1.1rem; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
     .locations-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; width: 100%; max-width: 900px; }
@@ -194,7 +246,8 @@
       padding: 0.5rem;
       display: inline-block;
       margin: 1rem 0;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.3);      transition: transform 0.3s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
     }
     .qr-container:hover { transform: scale(1.05); }
     .qr-container img { width: 128px; height: 128px; display: block; }
@@ -233,6 +286,8 @@
     }
     .btn svg { width: 20px; height: 20px; }
     .footer { text-align: center; padding: 2rem; font-size: 1.25rem; color: var(--gold); font-weight: 700; }
+    
+    /* حركة الاختفاء والانسيابية عند النزول (Scroll Reveal) */
     .scroll-reveal {
       opacity: 0;
       transform: translateY(40px);
@@ -243,8 +298,10 @@
       opacity: 1 !important;
       transform: translateY(0) !important;
     }
-    .stagger-1 { transition-delay: 0.1s; }    .stagger-2 { transition-delay: 0.25s; }
+    .stagger-1 { transition-delay: 0.1s; }
+    .stagger-2 { transition-delay: 0.25s; }
     .stagger-3 { transition-delay: 0.4s; }
+
     #toast {
       position: fixed;
       bottom: 2rem;
@@ -270,7 +327,19 @@
   </style>
 </head>
 <body>
+
+  <div id="welcome-screen">
+    <div class="envelope-btn" onclick="openInvitation()">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d4af37" stroke-width="1.5">
+        <path d="M22 2L2 22M22 2H10M22 2V14" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span>إفتح</span>
+    </div>
+    <div class="welcome-text">أَهْلًا بِكُمْ فِي بَيْتِ الْفَرَحِ.. حَيْثُ لِلنَّجَاحِ حِكَايَةٌ تُحْكَى 🌟</div>
+  </div>
+
   <div id="particles"></div>
+
   <main class="container">
     <header class="header scroll-reveal">
       <div class="basmala">بسم الله الرحمن الرحيم</div>
@@ -292,7 +361,8 @@
     </section>
     <section class="graduates-section scroll-reveal">
       <h2 class="section-title">✧ ثلاث فرحات اجتمعت في بيتٍ واحد ✧</h2>
-      <div class="graduates-grid">        <article class="graduate-card scroll-reveal stagger-1">
+      <div class="graduates-grid">
+        <article class="graduate-card scroll-reveal stagger-1">
           <span class="graduate-uni">جامعة فيلادلفيا</span>
           <span class="graduate-icon">🎓</span>
           <h3 class="graduate-name">نشأت</h3>
@@ -350,7 +420,19 @@
     <footer class="footer scroll-reveal">حضوركم يشرفنا ✨</footer>
   </main>
   <div id="toast">تم نسخ الرابط!</div>
+
   <script>
+    function openInvitation() {
+      const screen = document.getElementById('welcome-screen');
+      screen.style.opacity = '0';
+      screen.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        screen.style.display = 'none';
+        // تفعيل الأنيميشن فور فتح الكرت للعناصر العلوية مباشرة لضمان انسيابيتها
+        document.querySelectorAll('.header, .date-section').forEach(el => el.classList.add('visible'));
+      }, 800);
+    }
+
     function createParticles() {
       const container = document.getElementById('particles');
       const GOLD = '#d4af37', SILVER = '#c0c0c0';
@@ -380,6 +462,7 @@
         container.appendChild(p);
       }
     }
+
     function startCountdown() {
       const targetDate = new Date('2026-06-26T19:15:00').getTime();
       const el = {
@@ -390,7 +473,8 @@
       };
       const box = document.getElementById('countdown');
       const update = () => {
-        const diff = targetDate - new Date().getTime();        if (diff < 0) {
+        const diff = targetDate - new Date().getTime();
+        if (diff < 0) {
           box.innerHTML = '<div style="font-size:1.875rem;font-weight:700;color:var(--gold);margin:1rem 0">🎉 الحفل الآن! 🎉</div>';
           return;
         }
@@ -402,6 +486,7 @@
       update();
       setInterval(update, 1000);
     }
+
     function initScrollReveal() {
       const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -410,15 +495,17 @@
             observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+      }, { threshold: 0.05, rootMargin: '0px 0px -20px 0px' });
       document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
     }
+
     function showToast(msg) {
       const t = document.getElementById('toast');
       t.textContent = msg;
       t.classList.add('show');
       setTimeout(() => t.classList.remove('show'), 3000);
     }
+
     async function shareLocation(url) {
       if (navigator.share) {
         try {
@@ -429,6 +516,7 @@
       await navigator.clipboard.writeText(url);
       showToast('✅ تم نسخ الرابط!');
     }
+
     document.addEventListener('DOMContentLoaded', () => {
       createParticles();
       startCountdown();
@@ -439,5 +527,6 @@
       });
     });
     window.shareLocation = shareLocation;
-  </script></body>
+  </script>
+</body>
 </html>
