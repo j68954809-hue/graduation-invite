@@ -3013,4 +3013,904 @@
        OPEN INVITATION
     ======================================================== */
 
-    function openInvi
+    function openInvitation() {
+
+      const envelope =
+        document.getElementById(
+          "envelope"
+        );
+
+      const button =
+        document.getElementById(
+          "openInvitationButton"
+        );
+
+      const invitation =
+        document.getElementById(
+          "invitation"
+        );
+
+      if (
+        !envelope ||
+        !button ||
+        !invitation
+      ) {
+        return;
+      }
+
+      playEnvelopeSound();
+
+      envelope.classList.add(
+        "open"
+      );
+
+      button.disabled = true;
+
+
+      setTimeout(
+        () => {
+
+          invitation.classList.add(
+            "show"
+          );
+
+          observeRevealElements();
+
+
+          setTimeout(
+            () => {
+
+              invitation.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+              });
+
+              showMusicPrompt();
+
+            },
+            500
+          );
+
+        },
+        650
+      );
+
+    }
+
+
+    /* =======================================================
+       ENVELOPE SOUND
+    ======================================================== */
+
+    function playEnvelopeSound() {
+
+      const sound =
+        document.getElementById(
+          "envelopeSound"
+        );
+
+      if (!sound) return;
+
+      sound.currentTime = 0;
+      sound.volume = 0.25;
+
+      sound
+        .play()
+        .catch(() => {});
+
+    }
+
+
+    /* =======================================================
+       MUSIC
+    ======================================================== */
+
+    const audio =
+      document.getElementById(
+        "realAudio"
+      );
+
+    const musicButton =
+      document.getElementById(
+        "musicButton"
+      );
+
+    let musicPlaying = false;
+
+
+    async function startMusic() {
+
+      if (!audio) return;
+
+      try {
+
+        await audio.play();
+
+        musicPlaying = true;
+
+        if (musicButton) {
+
+          musicButton.classList.add(
+            "playing"
+          );
+
+          musicButton.textContent =
+            "🔊";
+
+        }
+
+      } catch (error) {
+
+        musicPlaying = false;
+
+        if (musicButton) {
+          musicButton.textContent =
+            "🎵";
+        }
+
+        console.warn(
+          "Music could not start:",
+          error
+        );
+
+      }
+
+    }
+
+
+    function stopMusic() {
+
+      if (!audio) return;
+
+      audio.pause();
+
+      musicPlaying = false;
+
+      if (musicButton) {
+
+        musicButton.classList.remove(
+          "playing"
+        );
+
+        musicButton.textContent =
+          "🎵";
+
+      }
+
+    }
+
+
+    function toggleMusic() {
+
+      if (musicPlaying) {
+        stopMusic();
+      } else {
+        startMusic();
+      }
+
+    }
+
+
+    /* =======================================================
+       MUSIC PROMPT
+    ======================================================== */
+
+    function showMusicPrompt() {
+
+      if (
+        document.getElementById(
+          "musicPrompt"
+        )
+      ) {
+        return;
+      }
+
+      const prompt =
+        document.createElement(
+          "div"
+        );
+
+      prompt.id =
+        "musicPrompt";
+
+      prompt.className =
+        "music-prompt";
+
+
+      prompt.innerHTML = `
+
+        <div class="music-prompt-text">
+          🎵 تحبوا نضيف موسيقى للجو؟
+        </div>
+
+        <div class="music-prompt-actions">
+
+          <button
+            class="music-choice yes"
+            id="musicYes"
+          >
+            نعم
+          </button>
+
+          <button
+            class="music-choice"
+            id="musicNo"
+          >
+            لا
+          </button>
+
+        </div>
+
+      `;
+
+
+      document.body.appendChild(
+        prompt
+      );
+
+
+      requestAnimationFrame(
+        () => {
+
+          prompt.classList.add(
+            "show"
+          );
+
+        }
+      );
+
+
+      const yes =
+        document.getElementById(
+          "musicYes"
+        );
+
+      const no =
+        document.getElementById(
+          "musicNo"
+        );
+
+
+      if (yes) {
+
+        yes.addEventListener(
+          "click",
+          () => {
+
+            startMusic();
+
+            hideMusicPrompt();
+
+          }
+        );
+
+      }
+
+
+      if (no) {
+
+        no.addEventListener(
+          "click",
+          hideMusicPrompt
+        );
+
+      }
+
+
+      setTimeout(
+        () => {
+
+          if (
+            document.body.contains(
+              prompt
+            )
+          ) {
+
+            hideMusicPrompt();
+
+          }
+
+        },
+        10000
+      );
+
+    }
+
+
+    function hideMusicPrompt() {
+
+      const prompt =
+        document.getElementById(
+          "musicPrompt"
+        );
+
+      if (!prompt) return;
+
+      prompt.classList.remove(
+        "show"
+      );
+
+      setTimeout(
+        () => {
+
+          if (
+            document.body.contains(
+              prompt
+            )
+          ) {
+            prompt.remove();
+          }
+
+        },
+        500
+      );
+
+    }
+
+
+    /* =======================================================
+       COUNTDOWN
+    ======================================================== */
+
+    function updateCountdown() {
+
+      const countdown =
+        document.getElementById(
+          "countdown"
+        );
+
+      const afterEvent =
+        document.getElementById(
+          "afterEvent"
+        );
+
+      if (!countdown || !afterEvent) {
+        return;
+      }
+
+
+      const now =
+        new Date();
+
+      const difference =
+        EVENT_DATE.getTime() -
+        now.getTime();
+
+
+      if (difference <= 0) {
+
+        countdown.style.display =
+          "none";
+
+        afterEvent.classList.add(
+          "show"
+        );
+
+        return;
+
+      }
+
+
+      const days =
+        Math.floor(
+          difference /
+          (1000 * 60 * 60 * 24)
+        );
+
+
+      const hours =
+        Math.floor(
+          (
+            difference /
+            (1000 * 60 * 60)
+          ) % 24
+        );
+
+
+      const minutes =
+        Math.floor(
+          (
+            difference /
+            (1000 * 60)
+          ) % 60
+        );
+
+
+      const seconds =
+        Math.floor(
+          (
+            difference /
+            1000
+          ) % 60
+        );
+
+
+      document.getElementById(
+        "days"
+      ).textContent = days;
+
+
+      document.getElementById(
+        "hours"
+      ).textContent = hours;
+
+
+      document.getElementById(
+        "minutes"
+      ).textContent = minutes;
+
+
+      document.getElementById(
+        "seconds"
+      ).textContent = seconds;
+
+    }
+
+
+    updateCountdown();
+
+    setInterval(
+      updateCountdown,
+      1000
+    );
+
+
+    /* =======================================================
+       MAP
+    ======================================================== */
+
+    function openMap() {
+
+      window.open(
+        MAP_URL,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+    }
+
+
+    /* =======================================================
+       CALENDAR
+    ======================================================== */
+
+    function addToCalendar() {
+
+      /*
+        7:00 PM Jordan time = 16:00 UTC
+        9:00 PM Jordan time = 18:00 UTC
+      */
+
+      const start =
+        "20290626T160000Z";
+
+      const end =
+        "20290626T180000Z";
+
+      const title =
+        "تخرج لُجين سلامة الخوالدة 🎓";
+
+      const location =
+        "منزل والد لُجين (أبو نشأت)";
+
+      const details =
+        "مشاركة فرحة تخرج لُجين سلامة الخوالدة - CLASS OF 2029";
+
+
+      const calendarURL =
+        "https://calendar.google.com/calendar/render" +
+        "?action=TEMPLATE" +
+        "&text=" +
+        encodeURIComponent(title) +
+        "&dates=" +
+        start +
+        "/" +
+        end +
+        "&location=" +
+        encodeURIComponent(location) +
+        "&details=" +
+        encodeURIComponent(details);
+
+
+      window.open(
+        calendarURL,
+        "_blank",
+        "noopener,noreferrer"
+      );
+
+    }
+
+
+    /* =======================================================
+       SHARE
+    ======================================================== */
+
+    async function shareInvitation() {
+
+      const shareData = {
+
+        title:
+          "دعوة تخرج لُجين سلامة الخوالدة 🎓",
+
+        text:
+          "يسعدني دعوتكم لمشاركة فرحة تخرجي 🤍",
+
+        url:
+          window.location.href
+
+      };
+
+
+      if (navigator.share) {
+
+        try {
+
+          await navigator.share(
+            shareData
+          );
+
+        } catch (error) {
+
+          /* User closed share dialog */
+
+        }
+
+      } else {
+
+        try {
+
+          await navigator.clipboard.writeText(
+            window.location.href
+          );
+
+          alert(
+            "تم نسخ رابط الدعوة 🤍"
+          );
+
+        } catch (error) {
+
+          alert(
+            "يمكنكم نسخ رابط الصفحة ومشاركته 🤍"
+          );
+
+        }
+
+      }
+
+    }
+
+
+    
+    /* =======================================================
+       SCROLL REVEAL
+    ======================================================== */
+
+    let revealObserver;
+
+
+    if (
+      "IntersectionObserver"
+      in window
+    ) {
+
+      revealObserver =
+        new IntersectionObserver(
+
+          (entries) => {
+
+            entries.forEach(
+              (entry) => {
+
+                if (
+                  entry.isIntersecting
+                ) {
+
+                  entry.target.classList.add(
+                    "visible"
+                  );
+
+                  revealObserver.unobserve(
+                    entry.target
+                  );
+
+                }
+
+              }
+            );
+
+          },
+
+          {
+            threshold: 0.12
+          }
+
+        );
+
+    }
+
+
+    function observeRevealElements() {
+
+      const elements =
+        document.querySelectorAll(
+          ".reveal"
+        );
+
+
+      elements.forEach(
+        (element) => {
+
+          if (revealObserver) {
+
+            revealObserver.observe(
+              element
+            );
+
+          } else {
+
+            element.classList.add(
+              "visible"
+            );
+
+          }
+
+        }
+      );
+
+    }
+
+
+    observeRevealElements();
+
+
+    /* =======================================================
+       MESSAGE MODAL
+    ======================================================== */
+
+    function openMessageModal() {
+
+      const modal =
+        document.getElementById(
+          "messageModal"
+        );
+
+      const nameInput =
+        document.getElementById(
+          "guestName"
+        );
+
+
+      if (!modal) return;
+
+
+      modal.classList.add(
+        "show"
+      );
+
+
+      setTimeout(
+        () => {
+
+          if (nameInput) {
+            nameInput.focus();
+          }
+
+        },
+        150
+      );
+
+    }
+
+
+    function closeMessageModal() {
+
+      const modal =
+        document.getElementById(
+          "messageModal"
+        );
+
+      if (!modal) return;
+
+      modal.classList.remove(
+        "show"
+      );
+
+    }
+
+
+    const messageModal =
+      document.getElementById(
+        "messageModal"
+      );
+
+
+    if (messageModal) {
+
+      messageModal.addEventListener(
+        "click",
+        (event) => {
+
+          if (
+            event.target.id ===
+            "messageModal"
+          ) {
+
+            closeMessageModal();
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =======================================================
+       EMAILJS
+    ======================================================== */
+
+    if (
+      typeof emailjs !==
+      "undefined"
+    ) {
+
+      emailjs.init(
+        EMAILJS_PUBLIC_KEY
+      );
+
+    }
+
+
+    const messageForm =
+      document.getElementById(
+        "messageForm"
+      );
+
+
+    if (messageForm) {
+
+      messageForm.addEventListener(
+        "submit",
+        async (event) => {
+
+          event.preventDefault();
+
+
+          const name =
+            document
+              .getElementById(
+                "guestName"
+              )
+              .value
+              .trim();
+
+
+          const message =
+            document
+              .getElementById(
+                "guestMessage"
+              )
+              .value
+              .trim();
+
+
+          const status =
+            document.getElementById(
+              "formStatus"
+            );
+
+
+          if (!name || !message) {
+
+            status.textContent =
+              "اكتبوا الاسم والرسالة أولًا 🤍";
+
+            return;
+
+          }
+
+
+          status.textContent =
+            "جاري إرسال رسالتكم... ✨";
+
+
+          if (
+            typeof emailjs ===
+            "undefined"
+          ) {
+
+            status.textContent =
+              "خدمة الرسائل غير متاحة حاليًا 🤍";
+
+            return;
+
+          }
+
+
+          try {
+
+            await emailjs.send(
+
+              EMAILJS_SERVICE_ID,
+
+              EMAILJS_TEMPLATE_ID,
+
+              {
+
+                from_name:
+                  name,
+
+                message:
+                  message,
+
+                to_email:
+                  MESSAGE_RECEIVER
+
+              }
+
+            );
+
+
+            status.textContent =
+              "وصلت رسالتكم بنجاح 🤍✨";
+
+
+            messageForm.reset();
+
+
+            setTimeout(
+              () => {
+
+                closeMessageModal();
+
+                status.textContent =
+                  "";
+
+              },
+              1800
+            );
+
+
+          } catch (error) {
+
+            console.error(
+              "EmailJS error:",
+              error
+            );
+
+
+            status.textContent =
+              "صار في مشكلة بالإرسال، جرّبوا مرة ثانية 🤍";
+
+          }
+
+        }
+      );
+
+    }
+
+
+    /* =======================================================
+       ESC CLOSE MODAL
+    ======================================================== */
+
+    document.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (
+          event.key ===
+          "Escape"
+        ) {
+
+          closeMessageModal();
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>    
